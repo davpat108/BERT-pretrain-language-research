@@ -1,1 +1,1 @@
-# davpatDipterv
+# Diplomatervemhez felhasznált kódok
