@@ -1,3 +1,3 @@
 # Diplomatervemhez felhasznált kódok
 
-# Cods used for my project
+# Codes used for my project
