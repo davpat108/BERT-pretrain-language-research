@@ -6,6 +6,7 @@
 - [Overview](#overview)
 - [Objectives](#objectives)
 - [Methodology](#methodology)
+- [Data](#data)
 
 ---
 
@@ -23,3 +24,12 @@ The primary objective of this project was to meticulously evaluate the performan
 The methodology section of this repository outlines the systematic approach undertaken to fine-tune the pre-trained BERT models. I employed both monolingual and multilingual BERT models to understand their respective impacts on the tasks at hand. This involved a detailed process of acquiring the pre-trained weights, adjusting the models to fit the particular needs of each language and task, and methodically training and evaluating them against established benchmarks.
 
 ---
+### Data <a name = "data"></a>
+
+| Task               | Resource                                                                                                                  |
+|--------------------|---------------------------------------------------------------------------------------------------------------------------|
+| NER                | [WikiAnn](https://huggingface.co/datasets/wikiann)                                                                        |
+| NER Hungarian      | [NerKor](https://huggingface.co/NYTK/named-entity-recognition-nerkor-hubert-hungarian)                                    |
+| Sentiment Analysis | [The Multilingual Amazon Reviews Corpus](https://aclanthology.org/2020.emnlp-main.369/)                                   |
+| Morphology         | [Morphology Probes](https://github.com/juditacs/morphology-probes)                                                        |
+| PoS Tagging        | [Universal Dependencies](https://universaldependencies.org/)                                                              |
