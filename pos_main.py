@@ -14,7 +14,8 @@ import time
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
-    
+import os
+
 def Read_Words_and_Labels(path):
     tree=readconll(path)
     texts=[]
@@ -135,7 +136,7 @@ def RUN(path, modelname):
             optim.zero_grad()
             input_ids = batch['input_ids'].to(device)
             attention_mask = batch['attention_mask'].to(device)
-            labels = batch['labels'].to(device)
+            labels = batch['labels'].type(torch.int64).to(device)
 
             outputs = model(input_ids, attention_mask=attention_mask, labels=labels)
             loss = outputs[0]
@@ -152,7 +153,7 @@ def RUN(path, modelname):
         for batch in val_loader:
             input_ids = batch['input_ids'].to(device)
             attention_mask = batch['attention_mask'].to(device)
-            labels = batch['labels'].to(device)
+            labels = batch['labels'].type(torch.int64).to(device)
 
             outputs = model(input_ids, attention_mask = attention_mask, labels = labels)
             loss = outputs[0]
@@ -176,6 +177,7 @@ def RUN(path, modelname):
         torch.cuda.empty_cache()
         print(str(epoch) + ". Epoch")
     
+    os.makedirs('POS_result', exist_ok=True)
     f=open('POS_result/'+path + '_' + modelname.replace("/", "_") + "_prec_and_rec.pkl", "wb")
     pickle.dump(best_total_accs, f)
     f.close()

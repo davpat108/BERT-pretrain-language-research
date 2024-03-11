@@ -13,6 +13,7 @@ import pickle
 import torch.nn as nn
 import seaborn as sns
 import matplotlib.pyplot as plt
+import os
 
 np.random.seed(22)
 torch.manual_seed(22)
@@ -158,7 +159,7 @@ def RUN(path, modelname):
             optim.zero_grad()
             input_ids = batch['input_ids'].to(device)
             attention_mask = batch['attention_mask'].to(device)
-            labels = batch['labels'].to(device)
+            labels = batch['labels'].type(torch.int64).to(device)
 
             outputs = model(input_ids, attention_mask=attention_mask, labels=labels)
             loss = outputs[0]
@@ -169,7 +170,7 @@ def RUN(path, modelname):
         for batch in val_loader:
             input_ids = batch['input_ids'].to(device)
             attention_mask = batch['attention_mask'].to(device)
-            labels = batch['labels'].to(device)
+            labels = batch['labels'].type(torch.int64).to(device)
 
             outputs = model(input_ids, attention_mask=attention_mask, labels=labels)
             loss = outputs[0]
@@ -185,7 +186,7 @@ def RUN(path, modelname):
             best_model = model
     end_time = time.perf_counter()
 
-    
+    os.makedirs('NER_Result/Freeze', exist_ok=True)
     f=open('NER_Result/Freeze/'+path+'_'+modelname.replace("/", "_")+"_seqeval.pkl", "wb")
     pickle.dump(best_Accs, f)
     f.close()

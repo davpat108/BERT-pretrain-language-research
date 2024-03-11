@@ -12,7 +12,7 @@ import time
 import pickle
 import seaborn as sns
 import matplotlib.pyplot as plt
-
+import os
 
 np.random.seed(122)
 torch.manual_seed(122)
@@ -175,7 +175,7 @@ def RUN(path, modelname):
             best_model = model
 
 
-
+    os.makedirs('NER_Result/NO_Freeze', exist_ok=True)
     f=open('NER_Result/NO_Freeze/'+path+'_'+modelname.replace("/", "_")+"_seqeval.pkl", "wb")
     pickle.dump(best_Accs, f)
     f.close()

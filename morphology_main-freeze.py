@@ -11,7 +11,7 @@ import gc
 import torch.nn as nn
 import seaborn as sns
 import matplotlib.pyplot as plt
-
+import os
 
 def read_tsv_with_pandas(language):
     if language == 'Fr':
@@ -156,15 +156,15 @@ def RUN(path, modelname):
     total_time = 0
     best_f1 = 0
     for epoch in range(15):
-        Accs={}
-        total_true=[]
-        total_pred=[]
+        Accs = {}
+        total_true = []
+        total_pred = []
         model.train()
         for batch in train_loader:
             optim.zero_grad()
             input_ids = batch['input_ids'].to(device)
             attention_mask = batch['attention_mask'].to(device)
-            labels = batch['labels'].to(device)
+            labels = batch['labels'].type(torch.int64).to(device)
             
             outputs = model(input_ids, attention_mask=attention_mask, labels=labels)
             loss = outputs[0]
@@ -175,14 +175,14 @@ def RUN(path, modelname):
         for batch in dev_loader:
             input_ids = batch['input_ids'].to(device)
             attention_mask = batch['attention_mask'].to(device)
-            labels = batch['labels'].to(device)
+            labels = batch['labels'].type(torch.int64).to(device)
             
             outputs = model(input_ids, attention_mask=attention_mask, labels=labels)
             loss = outputs[0]
-            predicted=torch.argmax(outputs.logits, dim=2)
+            predicted = torch.argmax(outputs.logits, dim=2)
             y_true, y_pred=PrepareForSeqeval(labels, predicted)
-            total_true=AddLabelsTogether(total_true, y_true)
-            total_pred=AddLabelsTogether(total_pred, y_pred)
+            total_true = AddLabelsTogether(total_true, y_true)
+            total_pred = AddLabelsTogether(total_pred, y_pred)
         Accs = classification_report(total_true, total_pred, output_dict=True)
         f1 = f1_score(total_true, total_pred, average='weighted')
         print(Accs)
@@ -191,7 +191,7 @@ def RUN(path, modelname):
             best_accs = Accs
             best_model = model
 
-
+    os.makedirs('Morph_results/first_sub', exist_ok=True)
     f=open('Morph_results/first_sub/'+path+'_'+modelname.replace("/", "_")+"_morphology_freeze.pkl", "wb")
     pickle.dump(best_accs, f)
     f.close()

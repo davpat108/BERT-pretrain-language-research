@@ -15,6 +15,7 @@ import time
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+import os
 
 class SeqDataset(torch.utils.data.Dataset):
     def __init__(self, encodings, labels):
@@ -71,7 +72,7 @@ def RUN(lang, modelname):
             optim.zero_grad()
             input_ids = batch['input_ids'].to(device)
             attention_mask = batch['attention_mask'].to(device)
-            labels = batch['labels'].to(device)
+            labels = batch['labels'].type(torch.int64).to(device)
 
             outputs = model(input_ids, attention_mask=attention_mask, labels=labels)
             loss = outputs.loss
@@ -91,7 +92,7 @@ def RUN(lang, modelname):
         for batch in val_loader:
             input_ids = batch['input_ids'].to(device)
             attention_mask = batch['attention_mask'].to(device)
-            labels = batch['labels'].to(device)
+            labels = batch['labels'].type(torch.int64).to(device)
             
             outputs = model(input_ids, attention_mask = attention_mask, labels=labels)
             predicted = torch.argmax(outputs.logits, dim = 1)
@@ -105,6 +106,7 @@ def RUN(lang, modelname):
         print(str(epoch) + ". Epoch")
         if Acc > Best_Acc:
             Best_Acc = Acc
+            os.makedirs('Sentiment_Result', exist_ok=True)
             torch.save(model, 'Sentiment_Result/'+lang+"_" + modelname.replace("/", "_") + "binary.pth")
     end_time = time.perf_counter()
     run_time = end_time - start_time 

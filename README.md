@@ -7,6 +7,8 @@
 - [Objectives](#objectives)
 - [Methodology](#methodology)
 - [Data](#data)
+- [Testing](#test)
+- [Results](#results)
 
 ---
 
@@ -33,3 +35,13 @@ The methodology section of this repository outlines the systematic approach unde
 | Sentiment Analysis | [The Multilingual Amazon Reviews Corpus](https://aclanthology.org/2020.emnlp-main.369/)                                   |
 | Morphology         | [Morphology Probes](https://github.com/juditacs/morphology-probes)                                                        |
 | PoS Tagging        | [Universal Dependencies](https://universaldependencies.org/)                                                              |
+---
+### Testing <a name = "test"></a>
+Assuming python 3.9 and cu117 compatibility:
+
+```bash
+pip install -r requirements.txt
+```
+---
+### Results <a name = "results"></a>
+In a nutshell, for every use case, the monolingual model performs better as expected, with the exception of Named Entity Recognition, where the multilingual sometimes performs better. The likely reason for this is that named entities are often in a foreign language in the WikiAnn dataset. This means that the monolingual tokenizer has a hard time tokenizing the foreign words into meaningful tokens, while the multilingual one is still quite good at it.

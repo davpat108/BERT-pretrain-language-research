@@ -90,7 +90,7 @@ def RUN(lang, modelname):
             optim.zero_grad()
             input_ids = batch['input_ids'].to(device)
             attention_mask = batch['attention_mask'].to(device)
-            labels = batch['labels'].to(device)
+            labels = batch['labels'].type(torch.int64).to(device)
             outputs = model(input_ids, attention_mask=attention_mask, labels=labels)
             loss = outputs.loss
             loss.backward()
@@ -105,7 +105,7 @@ def RUN(lang, modelname):
         for batch in val_loader:
             input_ids = batch['input_ids'].to(device)
             attention_mask = batch['attention_mask'].to(device)
-            labels = batch['labels'].to(device)
+            labels = batch['labels'].type(torch.int64).to(device)
             
             outputs = model(input_ids, attention_mask = attention_mask, labels=labels)
             predicted = torch.argmax(outputs.logits, dim = 1)
